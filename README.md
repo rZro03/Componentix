@@ -32,7 +32,7 @@ Ten en cuenta que los resultados del web scraping se mostrarán por consola.
 ## Dependencias
 El proyecto utiliza la biblioteca Jsoup para el análisis de HTML. Asegúrate de tener la siguiente dependencia en tu archivo de configuración de dependencias:
 
-`pom.xml`
+```xml
 <dependency>
     <groupId>org.jsoup</groupId>
     <artifactId>jsoup</artifactId>
