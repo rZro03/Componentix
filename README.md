@@ -1,6 +1,6 @@
 # Proyecto de Web Scraping y Firebase
 
-Este proyecto consiste en un sistema de web scraping que extrae información de productos de diferentes categorías de un sitio web y la almacena en una base de datos Firebase. Utiliza la biblioteca Jsoup para realizar el web scraping y el SDK de Firebase para la conexión y escritura de datos en la base de datos.
+Este proyecto consiste en un sistema de web scraping que extrae información de productos de diferentes categorías de un sitio web y la almacena en una base de datos Firebase.
 
 ## Estructura del proyecto
 
@@ -28,20 +28,20 @@ El proyecto utiliza las siguientes dependencias:
 
 - `com.google.firebase:firebase-admin:9.1.1`: SDK de Firebase para Java que proporciona acceso a los servicios de Firebase, incluyendo Firestore.
 - `org.jsoup:jsoup:1.16.1`: Biblioteca Java para el manejo de HTML y web scraping.
-- `org.junit.jupiter:junit-jupiter-api:5.9.2`: Dependencia opcional para pruebas unitarias.
 
 ## Ejecución
 
 Sigue los siguientes pasos para ejecutar el programa:
 
-1. Asegúrate de tener Java y Maven instalados en tu sistema.
+1. Asegúrate de tener Java y Maven instalados en tu sistema. Puedes descargar e instalar Java desde el sitio web oficial de Oracle y Maven desde el sitio web de Apache Maven.
+
 2. Abre una terminal en la carpeta raíz del proyecto.
-3. Ejecuta el siguiente comando para compilar el proyecto y descargar las dependencias: 'mvn clean install'
-4. Una vez compilado, ejecuta el programa con el siguiente comando: java -cp target/classes:target/dependency/* Principal
 
-Asegúrate de reemplazar `target` con el nombre de tu carpeta de destino si es diferente.
+3. Ejecuta el siguiente comando para compilar el proyecto y descargar las dependencias:
 
-5. El programa realizará el web scraping de productos de diferentes categorías y mostrará los resultados por consola.
+   ```shell
+   mvn clean install
+Una vez compilado, ejecuta el programa con el siguiente comando: ```java -cp target/classes:target/dependency/* Principal
 
 ## Personalización
 
