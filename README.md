@@ -44,7 +44,7 @@ Sigue los siguientes pasos para ejecutar el programa:
 
 Una vez compilado, ejecuta el programa con el siguiente comando: 
     
-    ```shell 
+    ```
     java -cp target/classes:target/dependency/* Principal
     
 ## Personalización
