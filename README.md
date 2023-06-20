@@ -41,10 +41,12 @@ Sigue los siguientes pasos para ejecutar el programa:
 
    ```shell
    mvn clean install
-Una vez compilado, ejecuta el programa con el siguiente comando: 
-   ```shell
-   java -cp target/classes:target/dependency/* Principal
 
+Una vez compilado, ejecuta el programa con el siguiente comando: 
+    
+    ```shell 
+    java -cp target/classes:target/dependency/* Principal
+    
 ## Personalización
 
 Puedes personalizar el proyecto de acuerdo a tus necesidades:
