@@ -1,58 +1,51 @@
-# Componentix
-Trabajo Proyecto Final POO
+# Proyecto de Web Scraping y Firebase
 
-# Proyecto de Web Scraping
-Este proyecto realiza web scraping en el sitio web PC Factory para extraer información de precios de diferentes categorías de productos(Tarjetas Graficas, Procesadores, Placas Madres y Almacenamiento). Utiliza la biblioteca Jsoup para realizar las solicitudes HTTP y analizar el contenido HTML de las páginas web.
+Este proyecto consiste en un sistema de web scraping que extrae información de productos de diferentes categorías de un sitio web y la almacena en una base de datos Firebase. Utiliza la biblioteca Jsoup para realizar el web scraping y el SDK de Firebase para la conexión y escritura de datos en la base de datos.
 
-## Clases
-El proyecto consta de las siguientes clases:
+## Estructura del proyecto
 
-### Clase FirebaseConnection
-La clase `FirebaseConnection` se encarga de establecer la conexión con la base de datos Firebase. Utiliza el archivo `Firebase.json` para autenticarse y configura la URL de la base de datos. Asegúrate de proporcionar el archivo `Firebase.json` y la URL correcta de la base de datos.
+El proyecto está organizado en los siguientes paquetes y clases:
 
-### Clase WebScraping
-La clase `WebScraping` contiene métodos para realizar web scraping en diferentes categorías de productos en el sitio web PC Factory. Cada método se conecta a una URL específica, extrae la información de los productos (nombre y precio) y la muestra por consola. Los métodos disponibles son:
+- `Firebase`
+  - `FirebaseConnection`: Clase encargada de establecer la conexión con la base de datos de Firebase.
 
-- `scrapingPlacaMadre()`: Realiza web scraping en la categoría de placas madre.
-- `scrapingProcesador()`: Realiza web scraping en la categoría de procesadores.
-- `scrapingTarjetaGrafica()`: Realiza web scraping en la categoría de tarjetas gráficas.
-- `scrapingAlmacenamiento()`: Realiza web scraping en la categoría de almacenamiento.
+- `WebScraping`
+  - `ScrapingService`: Interfaz que define el contrato para los servicios de web scraping.
+  - `WebScraping`: Clase principal que realiza el web scraping de los productos.
 
-## Uso
-Para utilizar este proyecto, sigue los siguientes pasos:
+- `Principal`: Clase principal del programa que contiene el método `main()` para ejecutar el web scraping.
 
-1. Asegúrate de tener Java instalado en tu sistema.
-2. Descarga el proyecto y abre el código en tu entorno de desarrollo.
-3. Configura el archivo `Firebase.json` con las credenciales correctas de tu proyecto Firebase.
-4. En la clase `Principal`, descomenta la línea `// FirebaseConnection.Connection();` si deseas utilizar la conexión a la base de datos.
-5. Ejecuta la clase `Principal` para iniciar el web scraping en las diferentes categorías de productos.
+## Configuración previa
 
-Ten en cuenta que los resultados del web scraping se mostrarán por consola.
+Antes de ejecutar el programa, es necesario realizar algunas configuraciones:
+
+1. Crea un proyecto en Firebase y habilita Firestore como base de datos.
+2. Descarga el archivo de configuración `Firebase.json` desde Firebase y colócalo en la carpeta raíz del proyecto.
 
 ## Dependencias
-El proyecto utiliza la biblioteca Jsoup para el análisis de HTML. Asegúrate de tener la siguiente dependencia en tu archivo de configuración de dependencias:
 
-```xml
-<dependency>
-    <groupId>com.google.firebase</groupId>
-    <artifactId>firebase-admin</artifactId>
-    <version>9.1.1</version>
-</dependency>
+El proyecto utiliza las siguientes dependencias:
 
-<dependency>
-    <groupId>org.junit.jupiter</groupId>
-    <artifactId>junit-jupiter-api</artifactId>
-    <version>5.9.2</version>
-</dependency>
+- `com.google.firebase:firebase-admin:9.1.1`: SDK de Firebase para Java que proporciona acceso a los servicios de Firebase, incluyendo Firestore.
+- `org.jsoup:jsoup:1.16.1`: Biblioteca Java para el manejo de HTML y web scraping.
+- `org.junit.jupiter:junit-jupiter-api:5.9.2`: Dependencia opcional para pruebas unitarias.
 
-<dependency>
-    <groupId>org.junit.jupiter</groupId>
-    <artifactId>junit-jupiter-params</artifactId>
-    <version>5.9.2</version>
-</dependency>
+## Ejecución
 
-<dependency>
-    <groupId>org.jsoup</groupId>
-    <artifactId>jsoup</artifactId>
-    <version>1.16.1</version>
-</dependency>
+Sigue los siguientes pasos para ejecutar el programa:
+
+1. Asegúrate de tener Java y Maven instalados en tu sistema.
+2. Abre una terminal en la carpeta raíz del proyecto.
+3. Ejecuta el siguiente comando para compilar el proyecto y descargar las dependencias: 'mvn clean install'
+4. Una vez compilado, ejecuta el programa con el siguiente comando: java -cp target/classes:target/dependency/* Principal
+
+Asegúrate de reemplazar `target` con el nombre de tu carpeta de destino si es diferente.
+
+5. El programa realizará el web scraping de productos de diferentes categorías y mostrará los resultados por consola.
+
+## Personalización
+
+Puedes personalizar el proyecto de acuerdo a tus necesidades:
+
+- Modifica las URLs de las categorías de productos en el archivo `Principal.java` para adaptarlo a tu sitio web.
+- Agrega nuevas clases o métodos para realizar tareas adicionales de web scraping o manipulación de datos.
