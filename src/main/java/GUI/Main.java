@@ -10,7 +10,7 @@ public class Main {
         SwingUtilities.invokeLater(() -> {
             try {
                 FirebaseConnection.connection();
-                Ventana ventana = new Ventana();
+                new Ventana();
             } catch (IOException e) {
                 System.err.println("Error al conectar a la base de datos de Firebase: " + e.getMessage());
             }
