@@ -143,13 +143,13 @@ public class Ventana extends JXFrame {
             JOptionPane.showMessageDialog(this, "No se han seleccionado productos.", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
         } else {
             this.selectedProducts.addAll(selectedProducts);
-            JOptionPane.showMessageDialog(this, "Productos comprados.", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Producto agregado al carro.", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
     private void abrirCarroCompras() {
         if (selectedProducts.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No se han comprado productos.", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "No se han agregado productos al carro.", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
         } else {
             panelCarroCompra = new PanelCarroCompra(selectedProducts);
             panelCarroCompra.setVisible(true);
