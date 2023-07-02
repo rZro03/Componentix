@@ -16,7 +16,7 @@ public class FirebaseConnection {
     public static void connection() throws IOException {
         // Uso Obligatorio de metodo deprecado, Builder().
 
-        FileInputStream serviceAccount = new FileInputStream("Firebase.json");
+        FileInputStream serviceAccount = new FileInputStream("Proyecto-POO.json");
 
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))

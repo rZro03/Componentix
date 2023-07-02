@@ -7,26 +7,24 @@ import com.google.cloud.firestore.QuerySnapshot;
 import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXList;
-import org.jdesktop.swingx.JXSearchField;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Ventana extends JXFrame {
     private final JXList productList;
     private final DefaultListModel<String> productListModel;
     private final JPanel categoryPanel;
-    private final List<String> selectedProducts;
+    private List<String> selectedProducts;
     private final Color backgroundColor = new Color(30, 30, 30); // Establece el color de fondo deseado
     private final Color fontColor = Color.WHITE; // Establece el color de fuente deseado
     private final Font font = new Font("Cascadia Code", Font.PLAIN, 14); // Establece la fuente deseada
     private PanelCarroCompra panelCarroCompra;
-    private JXSearchField searchField;
-    private JXButton searchButton;
 
     public Ventana() {
         // Configurar la ventana
@@ -35,6 +33,9 @@ public class Ventana extends JXFrame {
         setSize(700, 650);
         setLocationRelativeTo(null);
         setResizable(false);
+        int ventanaVentanaX = this.getLocation().x - 300;
+        int ventanaVentanaY = this.getLocation().y;
+        setLocation(ventanaVentanaX, ventanaVentanaY);
 
         // Establecer el estilo del panel principal
         JPanel mainPanel = new JPanel();
@@ -60,6 +61,7 @@ public class Ventana extends JXFrame {
         agregarCategoria("Tarjetas Gráficas");
         agregarCategoria("Placas Madres");
         agregarCategoria("Almacenamiento");
+        agregarCategoria("Memoria Ram");
 
         // Agregar la lista de productos
         JScrollPane scrollPane = new JScrollPane(productList);
@@ -114,6 +116,7 @@ public class Ventana extends JXFrame {
             QuerySnapshot querySnapshot = query.get().get();
             List<String> products = querySnapshot.getDocuments()
                     .stream()
+                    .sorted(Comparator.comparing(document -> document.getString("name")))
                     .map(document -> document.getString("name"))
                     .toList();
 
@@ -152,6 +155,9 @@ public class Ventana extends JXFrame {
             JOptionPane.showMessageDialog(this, "No se han agregado productos al carro.", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
         } else {
             panelCarroCompra = new PanelCarroCompra(selectedProducts);
+            int ventanaVentanaX = this.getLocation().x + this.getWidth();
+            int ventanaVentanaY = this.getLocation().y;
+            panelCarroCompra.setLocation(ventanaVentanaX, ventanaVentanaY);
             panelCarroCompra.setVisible(true);
         }
     }

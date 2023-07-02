@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class WebScraping implements ScrapingService{
 
-    private final Firestore database;
+    private Firestore database;
 
     public WebScraping() {
         // Obtener la instancia de Firestore desde FirebaseConnection
@@ -28,7 +28,7 @@ public class WebScraping implements ScrapingService{
     }
 
     @Override
-    public void scrape(String url) throws IOException {
+    public void scrapePCfactory(String url) throws IOException {
         Document document = Jsoup.connect(url).get();
         String name = "Product name";
         String price = "0";
@@ -57,6 +57,40 @@ public class WebScraping implements ScrapingService{
         }
     }
 
+    @Override
+    public void scrapePCplanet(String url) throws IOException {
+        Document document = Jsoup.connect(url).get();
+        String name = "Product name";
+        String price = "0";
+
+        // Obtener el título de la página
+        String title = document.title();
+        System.out.println("Titulo: " + title);
+
+        Elements elements = document.getElementsByClass("show-outimage-q-onimage-alt product-first pcols-lg-first" +
+                " pcols-md-first pcols-xs-first post-1459 product type-product status-publish has-post-thumbnail " +
+                "product_cat-componentes product_cat-tarjetas-graficas pa_cant-memoria-1gb first " +
+                "outofstock taxable shipping-taxable purchasable product-type-simple");
+
+        for (Element product : elements) {
+            name = product.getElementsByClass("product-loop-title").text();
+            price = product.getElementsByClass("woocommerce-Price-amount amount").text();
+
+            // Remover el descuento y los caracteres no numéricos del precio
+            price = price.replaceAll("[-+]?\\d+%\\s*", "").replaceAll("[^\\d.]", "");
+
+            System.out.println("\nNombre: " + name);
+            System.out.println("Precio: " + price);
+
+            // Determinar la categoría del producto
+            String category = determineCategory(url);
+
+            // Insertar en la base de datos con la categoría correspondiente
+            insertToFirebase(name, price, category);
+        }
+    }
+
+
     private void insertToFirebase(String name, String price, String category) {
         // Crear un nuevo documento en la colección "Productos"
         DocumentReference documentRef = database.collection("Productos").document();
@@ -82,14 +116,16 @@ public class WebScraping implements ScrapingService{
     }
 
     private String determineCategory(String url) {
-        if (url.contains("placas-madres")) {
+        if (url.contains("placas-madres") || url.contains("tarjetas-madres")) {
             return "Placas Madres";
         } else if (url.contains("procesadores")) {
             return "Procesadores";
         } else if (url.contains("tarjetas-graficas")) {
             return "Tarjetas Gráficas";
-        } else if (url.contains("almacenamiento")) {
+        } else if (url.contains("almacenamiento") || url.contains("discos-duros-externos")) {
             return "Almacenamiento";
+        } else if (url.contains("memorias-pc")) {
+            return "Memoria Ram";
         }
         return "Categoría Desconocida";
     }

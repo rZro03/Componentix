@@ -15,8 +15,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class PanelCarroCompra extends JXFrame {
     private JXTable tablaProductos;
@@ -41,10 +41,11 @@ public class PanelCarroCompra extends JXFrame {
         mainPanel.setBackground(backgroundColor);
         add(mainPanel);
 
+
         // Crear el panel para los botones
-        JPanel buttonPanel = new JPanel(new GridLayout(4, 1));
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
         buttonPanel.setBackground(backgroundColor);
-        mainPanel.add(buttonPanel, BorderLayout.WEST);
+        mainPanel.add(buttonPanel, BorderLayout.NORTH);
 
         // Crear los botones
         JButton actualizarButton = new JButton("Actualizar");
@@ -73,18 +74,18 @@ public class PanelCarroCompra extends JXFrame {
         });
         buttonPanel.add(eliminarButton);
 
-        JButton anadirButton = new JButton("Añadir Producto");
-        anadirButton.setBackground(backgroundColor);
-        anadirButton.setForeground(fontColor);
-        anadirButton.setFont(font);
-        anadirButton.addActionListener(new ActionListener() {
+        JButton comprarButton = new JButton("Comprar");
+        comprarButton.setBackground(backgroundColor);
+        comprarButton.setForeground(fontColor);
+        comprarButton.setFont(font);
+        comprarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Acción del botón "Añadir Producto"
-                agregarProductoTabla();
+                JOptionPane.showMessageDialog(PanelCarroCompra.this, "Compra realizada exitosamente por: $" + calcularTotal(), "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+                System.exit(0); // Finalizar el programa
             }
         });
-        buttonPanel.add(anadirButton);
+        buttonPanel.add(comprarButton);
 
         // Crear la tabla de productos
         tableModel = new DefaultTableModel(new Object[]{"NOMBRE", "PRECIO"}, 0);
@@ -104,23 +105,10 @@ public class PanelCarroCompra extends JXFrame {
         // Calcular el total de la compra
         BigDecimal total = calcularTotal();
         lblTotal = new JXLabel("Total: $" + total);
+        lblTotal.setFont(font);
         lblTotal.setForeground(Color.WHITE);
         lblTotal.setHorizontalAlignment(SwingConstants.LEFT);
         mainPanel.add(lblTotal, BorderLayout.SOUTH);
-
-        // Crear el botón de comprar
-        JButton comprarButton = new JButton("Comprar");
-        comprarButton.setBackground(backgroundColor);
-        comprarButton.setForeground(fontColor);
-        comprarButton.setFont(font);
-        comprarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(PanelCarroCompra.this, "Compra realizada exitosamente.", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
-                System.exit(0); // Finalizar el programa
-            }
-        });
-        add(comprarButton, BorderLayout.EAST);
     }
 
     private String obtenerPrecioProducto(String producto) {
@@ -138,20 +126,18 @@ public class PanelCarroCompra extends JXFrame {
     }
 
     public BigDecimal calcularTotal() {
-        BigDecimal total = BigDecimal.ZERO;
-
-        for (int i = 0; i < tableModel.getRowCount(); i++) {
-            String precioProductoStr = (String) tableModel.getValueAt(i, 1);
-
-            try {
-                BigDecimal precioProducto = new BigDecimal(precioProductoStr.replace(".", ""));
-                total = total.add(precioProducto);
-            } catch (NumberFormatException e) {
-                System.err.println("Error al convertir el precio del producto: " + e.getMessage());
-            }
-        }
-
-        return total;
+        return IntStream.range(0, tableModel.getRowCount())
+                .mapToObj(i -> (String) tableModel.getValueAt(i, 1))
+                .map(precioProductoStr -> {
+                    try {
+                        BigDecimal precioProducto = new BigDecimal(precioProductoStr.replace(".", ""));
+                        return precioProducto;
+                    } catch (NumberFormatException e) {
+                        System.err.println("Error al convertir el precio del producto: " + e.getMessage());
+                        return BigDecimal.ZERO;
+                    }
+                })
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
 
@@ -169,53 +155,25 @@ public class PanelCarroCompra extends JXFrame {
 
     public void recalcularTotal() {
         BigDecimal total = calcularTotal();
+
         lblTotal.setText("Total: $" + total.toPlainString());
     }
 
     private void actualizarTabla(List<String> productos) {
         // Actualizar la tabla con los nuevos productos
-        for (String producto : productos) {
-            String precio = obtenerPrecioProducto(producto);
-            // Verificar si el producto ya existe en la tabla
-            boolean existe = false;
-            for (int i = 0; i < tableModel.getRowCount(); i++) {
-                String nombreProducto = (String) tableModel.getValueAt(i, 0);
-                if (nombreProducto.equals(producto)) {
-                    existe = true;
-                    break;
-                }
-            }
-            if (!existe) {
-                tableModel.addRow(new Object[]{producto, precio});
-            }
-        }
-
+        productos.stream()
+                .filter(producto -> !existeProductoEnTabla(producto))
+                .forEach(producto -> {
+                    String precio = obtenerPrecioProducto(producto);
+                    tableModel.addRow(new Object[]{producto, precio});
+                });
         // Calcular el total después de actualizar la tabla
-        calcularTotal();
+        recalcularTotal();
     }
 
-    private void agregarProductoTabla() {
-        String nombreProducto = JOptionPane.showInputDialog(this, "Ingrese el nombre del producto:", "Añadir Producto", JOptionPane.PLAIN_MESSAGE);
-        if (nombreProducto != null && !nombreProducto.isEmpty()) {
-            String precio = obtenerPrecioProducto(nombreProducto);
-            if (!precio.isEmpty()) {
-                // Verificar si el producto ya existe en la tabla
-                boolean existe = false;
-                for (int i = 0; i < tableModel.getRowCount(); i++) {
-                    String productoExistente = (String) tableModel.getValueAt(i, 0);
-                    if (productoExistente.equals(nombreProducto)) {
-                        existe = true;
-                        break;
-                    }
-                }
-                if (!existe) {
-                    tableModel.addRow(new Object[]{nombreProducto, precio});
-                } else {
-                    JOptionPane.showMessageDialog(this, "El producto ya existe en la tabla.", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
-                }
-            } else {
-                JOptionPane.showMessageDialog(this, "No se encontró el precio del producto.", "Mensaje", JOptionPane.ERROR_MESSAGE);
-            }
-        }
+    private boolean existeProductoEnTabla(String producto) {
+        return IntStream.range(0, tableModel.getRowCount())
+                .mapToObj(i -> (String) tableModel.getValueAt(i, 0))
+                .anyMatch(nombreProducto -> nombreProducto.equals(producto));
     }
 }
