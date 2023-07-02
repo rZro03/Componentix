@@ -97,11 +97,10 @@ public class PanelCarroCompra extends JXFrame {
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
         // Agregar los productos a la tabla
-        for (String producto : productos) {
+        productos.forEach(producto -> {
             String precio = obtenerPrecioProducto(producto);
             tableModel.addRow(new Object[]{producto, precio});
-        }
-
+        });
 
         // Calcular el total de la compra
         BigDecimal total = calcularTotal();

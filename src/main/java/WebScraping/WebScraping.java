@@ -30,8 +30,6 @@ public class WebScraping implements ScrapingService{
     @Override
     public void scrapePCfactory(String url) throws IOException {
         Document document = Jsoup.connect(url).get();
-        String name = "Product name";
-        String price = "0";
 
         // Obtener el título de la página
         String title = document.title();
@@ -39,9 +37,9 @@ public class WebScraping implements ScrapingService{
 
         Elements elements = document.getElementsByClass("product");
 
-        for (Element product : elements) {
-            name = product.getElementsByClass("price color-dark-2  product__card-title").text();
-            price = product.getElementsByClass("title-md color-primary-1 alineado-porcentaje-precio").text();
+        elements.stream().forEach(product -> {
+            String name = product.getElementsByClass("price color-dark-2  product__card-title").text();
+            String price = product.getElementsByClass("title-md color-primary-1 alineado-porcentaje-precio").text();
 
             // Remover el descuento y los caracteres no numéricos del precio
             price = price.replaceAll("[-+]?\\d+%\\s*", "").replaceAll("[^\\d.]", "");
@@ -54,14 +52,12 @@ public class WebScraping implements ScrapingService{
 
             // Insertar en la base de datos con la categoría correspondiente
             insertToFirebase(name, price, category);
-        }
+        });
     }
 
     @Override
     public void scrapePCplanet(String url) throws IOException {
         Document document = Jsoup.connect(url).get();
-        String name = "Product name";
-        String price = "0";
 
         // Obtener el título de la página
         String title = document.title();
@@ -72,9 +68,9 @@ public class WebScraping implements ScrapingService{
                 "product_cat-componentes product_cat-tarjetas-graficas pa_cant-memoria-1gb first " +
                 "outofstock taxable shipping-taxable purchasable product-type-simple");
 
-        for (Element product : elements) {
-            name = product.getElementsByClass("product-loop-title").text();
-            price = product.getElementsByClass("woocommerce-Price-amount amount").text();
+        elements.stream().forEach(product -> {
+            String name = product.getElementsByClass("product-loop-title").text();
+            String price = product.getElementsByClass("woocommerce-Price-amount amount").text();
 
             // Remover el descuento y los caracteres no numéricos del precio
             price = price.replaceAll("[-+]?\\d+%\\s*", "").replaceAll("[^\\d.]", "");
@@ -87,7 +83,7 @@ public class WebScraping implements ScrapingService{
 
             // Insertar en la base de datos con la categoría correspondiente
             insertToFirebase(name, price, category);
-        }
+        });
     }
 
 
