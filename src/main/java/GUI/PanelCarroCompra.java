@@ -102,6 +102,7 @@ public class PanelCarroCompra extends JXFrame {
             tableModel.addRow(new Object[]{producto, precio});
         }
 
+
         // Calcular el total de la compra
         BigDecimal total = calcularTotal();
         lblTotal = new JXLabel("Total: $" + total);
