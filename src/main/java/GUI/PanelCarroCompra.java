@@ -104,7 +104,7 @@ public class PanelCarroCompra extends JXFrame {
 
         // Calcular el total de la compra
         BigDecimal total = calcularTotal();
-        lblTotal = new JXLabel("Total: $" + total);
+        lblTotal = new JXLabel("Total: $" + total + " CLP");
         lblTotal.setFont(font);
         lblTotal.setForeground(Color.WHITE);
         lblTotal.setHorizontalAlignment(SwingConstants.LEFT);
@@ -138,7 +138,6 @@ public class PanelCarroCompra extends JXFrame {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-
     void accionEliminar(List<String> productos) {
         int selectedRow = tablaProductos.getSelectedRow();
         if (selectedRow != -1) {
@@ -154,7 +153,7 @@ public class PanelCarroCompra extends JXFrame {
     public void recalcularTotal() {
         BigDecimal total = calcularTotal();
 
-        lblTotal.setText("Total: $" + total.toPlainString());
+        lblTotal.setText("Total: $" + total.toPlainString() + " CLP");
     }
 
     void actualizarTabla(List<String> productos) {

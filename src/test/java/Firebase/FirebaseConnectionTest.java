@@ -44,8 +44,8 @@ class FirebaseConnectionTest {
 
     @Test
     public void testGetSameDatabaseInstance() {
-        Firestore database1 = FirebaseConnection.getDataBase();
-        Firestore database2 = FirebaseConnection.getDataBase();
+        database1 = FirebaseConnection.getDataBase();
+        database2 = FirebaseConnection.getDataBase();
         assertSame(database1, database2);
     }
 

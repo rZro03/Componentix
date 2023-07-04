@@ -85,7 +85,6 @@ public class WebScraping implements ScrapingService{
         });
     }
 
-
     private void insertToFirebase(String name, String price, String category) {
         // Crear un nuevo documento en la colección "Productos"
         DocumentReference documentRef = database.collection("Productos").document();
