@@ -11,7 +11,6 @@ import com.google.common.util.concurrent.MoreExecutors;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
@@ -44,8 +43,8 @@ public class WebScraping implements ScrapingService{
             // Remover el descuento y los caracteres no numéricos del precio
             price = price.replaceAll("[-+]?\\d+%\\s*", "").replaceAll("[^\\d.]", "");
 
-            System.out.println("\nNombre: " + name);
-            System.out.println("Precio: " + price);
+            System.out.println(name);
+            System.out.println(price);
 
             // Determinar la categoría del producto
             String category = determineCategory(url);
@@ -75,11 +74,11 @@ public class WebScraping implements ScrapingService{
             // Remover el descuento y los caracteres no numéricos del precio
             price = price.replaceAll("[-+]?\\d+%\\s*", "").replaceAll("[^\\d.]", "");
 
-            System.out.println("\nNombre: " + name);
-            System.out.println("Precio: " + price);
-
             // Determinar la categoría del producto
             String category = determineCategory(url);
+
+            System.out.println(name);
+            System.out.println(price);
 
             // Insertar en la base de datos con la categoría correspondiente
             insertToFirebase(name, price, category);
@@ -120,7 +119,7 @@ public class WebScraping implements ScrapingService{
             return "Tarjetas Gráficas";
         } else if (url.contains("almacenamiento") || url.contains("discos-duros-externos")) {
             return "Almacenamiento";
-        } else if (url.contains("memorias-pc")) {
+        } else if (url.contains("memorias")) {
             return "Memoria Ram";
         }
         return "Categoría Desconocida";

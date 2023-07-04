@@ -18,13 +18,14 @@ public class FirebaseConnection {
 
         FileInputStream serviceAccount = new FileInputStream("Proyecto-POO.json");
 
-        FirebaseOptions options = new FirebaseOptions.Builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .setDatabaseUrl("https://sistema-de-inventario-4f7f9-default-rtdb.firebaseio.com")
-                .build();
+        if (FirebaseApp.getApps().isEmpty()) {
+            FirebaseOptions options = new FirebaseOptions.Builder()
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                    .setDatabaseUrl("https://sistema-de-inventario-4f7f9-default-rtdb.firebaseio.com")
+                    .build();
 
-        FirebaseApp.initializeApp(options);
-
+            FirebaseApp.initializeApp(options);
+        }
         dataBase = FirestoreClient.getFirestore();
 
         System.out.println("Se ha conectado con exito a la base de datos.");

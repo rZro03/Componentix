@@ -1,7 +1,6 @@
 package WebScraping;
 
 import java.io.IOException;
-import java.util.List;
 
 public interface ScrapingService {
 

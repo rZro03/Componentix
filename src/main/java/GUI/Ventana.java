@@ -76,7 +76,7 @@ public class Ventana extends JXFrame {
         compraButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                comprarProductos();
+                agregarAlcarro();
             }
         });
 
@@ -122,7 +122,7 @@ public class Ventana extends JXFrame {
 
             products.forEach(productListModel::addElement);
         } catch (Exception e) {
-            System.err.println("Error al cargar los productos: " + e.getMessage());
+            throw new RuntimeException("Error al cargar los productos: " + e.getMessage(), e);
         }
     }
 
@@ -140,7 +140,7 @@ public class Ventana extends JXFrame {
         categoryPanel.add(categoryButton);
     }
 
-    private void comprarProductos() {
+    void agregarAlcarro() {
         List<String> selectedProducts = productList.getSelectedValuesList();
         if (selectedProducts.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No se han seleccionado productos.", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
@@ -150,7 +150,7 @@ public class Ventana extends JXFrame {
         }
     }
 
-    private void abrirCarroCompras() {
+    void abrirCarroCompras() {
         if (selectedProducts.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No se han agregado productos al carro.", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
         } else {
@@ -160,5 +160,9 @@ public class Ventana extends JXFrame {
             panelCarroCompra.setLocation(ventanaVentanaX, ventanaVentanaY);
             panelCarroCompra.setVisible(true);
         }
+    }
+
+    public DefaultListModel<String> getProductListModel() {
+        return productListModel;
     }
 }

@@ -111,7 +111,7 @@ public class PanelCarroCompra extends JXFrame {
         mainPanel.add(lblTotal, BorderLayout.SOUTH);
     }
 
-    private String obtenerPrecioProducto(String producto) {
+    String obtenerPrecioProducto(String producto) {
         Query query = database.collection("Productos").whereEqualTo("name", producto);
 
         try {
@@ -119,10 +119,8 @@ public class PanelCarroCompra extends JXFrame {
             DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
             return documentSnapshot.getString("price");
         } catch (Exception e) {
-            System.err.println("Error al obtener el precio del producto '" + producto + "': " + e.getMessage());
+            throw new RuntimeException("Error al obtener el precio del producto" + producto + ": " + e.getMessage());
         }
-
-        return "";
     }
 
     public BigDecimal calcularTotal() {
@@ -141,7 +139,7 @@ public class PanelCarroCompra extends JXFrame {
     }
 
 
-    private void accionEliminar(List<String> productos) {
+    void accionEliminar(List<String> productos) {
         int selectedRow = tablaProductos.getSelectedRow();
         if (selectedRow != -1) {
             tableModel.removeRow(selectedRow);
@@ -159,7 +157,7 @@ public class PanelCarroCompra extends JXFrame {
         lblTotal.setText("Total: $" + total.toPlainString());
     }
 
-    private void actualizarTabla(List<String> productos) {
+    void actualizarTabla(List<String> productos) {
         // Actualizar la tabla con los nuevos productos
         productos.stream()
                 .filter(producto -> !existeProductoEnTabla(producto))
